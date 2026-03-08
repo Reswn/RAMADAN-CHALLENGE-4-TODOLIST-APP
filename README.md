@@ -1,10 +1,11 @@
-Berikut adalah draf **README.md** yang singkat, profesional, dan informatif untuk proyek aplikasi web Anda.
-
----
-
 # 🌙 Ramadhan Challenge: To-Do List App
 
 Aplikasi web interaktif untuk membantu umat Muslim memantau dan meningkatkan kualitas ibadah selama bulan Ramadhan. Aplikasi ini dirancang dengan antarmuka yang modern, responsif, dan fitur motivasi real-time.
+**Challenge 4- Alhazen Academy Ramadhan Coding Challenge**
+
+**Dibuat oleh:** Reni Kartika Suwandi  
+**Program:** Alhazen Academy Ramadhan Coding Challenge  
+**Tahun:** 2026
 
 🔗 **Live Demo:** [https://ramadan-challenge-4-todolist-app-4j.vercel.app/](https://ramadan-challenge-4-todolist-app-4j.vercel.app/)
 
