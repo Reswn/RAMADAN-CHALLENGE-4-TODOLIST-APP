@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ramadhan To-Do List - Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fontsource/poppins@4.5.0/index.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Sidebar Overlay -->
+    <div
+      class="sidebar-overlay"
+      id="sidebarOverlay"
+      onclick="toggleSidebar()"
+    ></div>
+
+    <!-- Mobile Toggle -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <div class="app-container">
+      <!-- Top Header Navigation -->
+      <header class="top-header-nav">
+        <div class="header-logo-section">
+          <div class="header-logo-icon">
+            <i class="bi bi-moon-stars-fill icon-white"></i>
+          </div>
+          <div class="header-logo-text">
+            <h1>Ramadhan</h1>
+            <p>To-Do List</p>
+          </div>
+        </div>
+
+        <ul class="header-nav-menu">
+          <li class="header-nav-item">
+            <a
+              class="header-nav-link active"
+              onclick="switchPage('dashboard', event)"
+            >
+              <i class="bi bi-grid-fill icon-white"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" onclick="switchPage('shalat', event)">
+              <i class="bi bi-star-fill icon-green"></i>
+              <span>Shalat</span>
+            </a>
+          </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" onclick="switchPage('quran', event)">
+              <i class="bi bi-journal-bookmark-fill icon-blue"></i>
+              <span>Qur'an</span>
+            </a>
+          </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" onclick="switchPage('puasa', event)">
+              <i class="bi bi-moon-stars-fill icon-gold"></i>
+              <span>Puasa</span>
+              <span class="header-nav-badge">30</span>
+            </a>
+          </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" onclick="switchPage('dzikir', event)">
+              <i class="bi bi-hand-thumbs-up-fill icon-pink"></i>
+              <span>Dzikir</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="header-right-section">
+          <div class="clock-widget">
+            <div class="clock-icon">
+              <i class="bi bi-clock-fill icon-white"></i>
+            </div>
+            <div class="clock-time" id="clockTime">00:00:00</div>
+          </div>
+          <button class="theme-btn" onclick="toggleTheme()">
+            <i class="bi bi-moon-fill icon-primary" id="themeIcon"></i>
+          </button>
+          <button class="notif-btn" onclick="toggleNotifications()">
+            <i class="bi bi-bell-fill icon-primary" id="notifIcon"></i>
+          </button>
+          <div class="user-profile">
+            <div class="user-avatar">M</div>
+            <span class="user-name">Muslim</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Left Sidebar -->
+      <aside class="left-sidebar" id="leftSidebar">
+        <div class="sidebar-greeting-section">
+          <div class="sidebar-greeting-icon" id="greetingIcon">
+            <i class="bi bi-moon-stars-fill icon-primary"></i>
+          </div>
+          <h2 class="sidebar-greeting-title" id="sidebarGreeting">
+            Selamat Pagi!
+          </h2>
+          <p class="sidebar-greeting-text">Mari selesaikan ibadah hari ini!</p>
+        </div>
+
+        <div class="sidebar-progress-section">
+          <div class="sidebar-progress-card">
+            <div class="sidebar-progress-value" id="sidebarProgress">0%</div>
+            <div class="sidebar-progress-label">Progress Hari Ini</div>
+          </div>
+          <div class="sidebar-streak-card">
+            <div class="sidebar-streak-value" id="streakValue">0</div>
+            <div class="sidebar-streak-label">
+              <i class="bi bi-fire icon-white"></i> Hari Berturut
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-motivation-section">
+          <div class="sidebar-motivation-card">
+            <div class="sidebar-motivation-icon">
+              <i class="bi bi-stars icon-gold"></i>
+            </div>
+            <div class="sidebar-motivation-quote" id="sidebarMotivationQuote">
+              "Sedikit tapi konsisten lebih baik daripada banyak tapi terputus."
+            </div>
+            <div class="sidebar-motivation-status" id="sidebarMotivationStatus">
+              <i class="bi bi-exclamation-circle-fill icon-gold"></i>
+              <span>Belum optimal</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- DASHBOARD PAGE -->
+        <div class="page-section active" id="dashboard-page">
+          <!-- Page Header -->
+          <div class="page-header-section">
+            <div class="page-header-top">
+              <h1 class="page-title">
+                <i class="bi bi-speedometer2 icon-primary"></i>
+                Dashboard
+              </h1>
+              <div class="page-progress-summary">
+                <div class="progress-badge">
+                  <span
+                    class="progress-badge-value"
+                    id="dashboardProgressPercent"
+                    >0%</span
+                  >
+                  <span class="progress-badge-label">Progress</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="dashboard-stats-grid">
+            <div
+              class="dashboard-stat-card"
+              onclick="switchPage('shalat', event)"
+            >
+              <div class="stat-card-header">
+                <div class="stat-card-icon shalat">
+                  <i class="bi bi-star-fill icon-green"></i>
+                </div>
+              </div>
+              <div class="stat-card-value" id="dashStatShalat">0/5</div>
+              <div class="stat-card-label">Shalat Hari Ini</div>
+              <div class="stat-card-progress">
+                <div class="progress-track">
+                  <div
+                    class="progress-fill fill-green"
+                    id="dashStatShalatBar"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="dashboard-stat-card"
+              onclick="switchPage('quran', event)"
+            >
+              <div class="stat-card-header">
+                <div class="stat-card-icon quran">
+                  <i class="bi bi-journal-bookmark-fill icon-blue"></i>
+                </div>
+              </div>
+              <div class="stat-card-value" id="dashStatQuran">0%</div>
+              <div class="stat-card-label">Target Qur'an</div>
+              <div class="stat-card-progress">
+                <div class="progress-track">
+                  <div
+                    class="progress-fill fill-blue"
+                    id="dashStatQuranBar"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="dashboard-stat-card"
+              onclick="switchPage('puasa', event)"
+            >
+              <div class="stat-card-header">
+                <div class="stat-card-icon puasa">
+                  <i class="bi bi-moon-stars-fill icon-gold"></i>
+                </div>
+              </div>
+              <div class="stat-card-value" id="dashStatPuasa">0/30</div>
+              <div class="stat-card-label">Puasa Ramadhan</div>
+              <div class="stat-card-progress">
+                <div class="progress-track">
+                  <div
+                    class="progress-fill fill-gold"
+                    id="dashStatPuasaBar"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="dashboard-stat-card"
+              onclick="switchPage('dzikir', event)"
+            >
+              <div class="stat-card-header">
+                <div class="stat-card-icon dzikir">
+                  <i class="bi bi-hand-thumbs-up-fill icon-pink"></i>
+                </div>
+              </div>
+              <div class="stat-card-value" id="dashStatDzikir">0/5</div>
+              <div class="stat-card-label">Dzikir Hari Ini</div>
+              <div class="stat-card-progress">
+                <div class="progress-track">
+                  <div
+                    class="progress-fill fill-pink"
+                    id="dashStatDzikirBar"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Motivation Section -->
+          <div class="motivation-section">
+            <div class="motivation-icon">
+              <i class="bi bi-stars icon-gold"></i>
+            </div>
+            <div class="motivation-text" id="motivationText">
+              Ayo lengkapi ibadah hari ini!
+            </div>
+            <div class="motivation-badge low" id="dashboardMotivationBadge">
+              <i class="bi bi-exclamation-circle-fill icon-gold"></i>
+              <span>Belum optimal</span>
+            </div>
+          </div>
+
+          <!-- Planning Section -->
+          <div class="planning-section">
+            <h3 class="planning-title">
+              <i class="bi bi-calendar-check icon-primary"></i>
+              Rencana Kegiatan Hari Ini
+            </h3>
+            <div class="planning-grid">
+              <div
+                class="planning-card"
+                onclick="switchPage('shalat', event)"
+                style="cursor: pointer"
+              >
+                <div class="planning-card-header">
+                  <div
+                    class="planning-card-icon"
+                    style="
+                      background: linear-gradient(
+                        135deg,
+                        #d1fae5 0%,
+                        #a7f3d0 100%
+                      );
+                      color: var(--accent-green);
+                    "
+                  >
+                    <i class="bi bi-star-fill icon-green"></i>
+                  </div>
+                  <div>
+                    <div class="planning-card-title">Shalat 5 Waktu</div>
+                    <div class="planning-card-target">
+                      Target: 5 shalat wajib
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="planning-card"
+                onclick="switchPage('quran', event)"
+                style="cursor: pointer"
+              >
+                <div class="planning-card-header">
+                  <div
+                    class="planning-card-icon"
+                    style="
+                      background: linear-gradient(
+                        135deg,
+                        #dbeafe 0%,
+                        #bfdbfe 100%
+                      );
+                      color: var(--accent-blue);
+                    "
+                  >
+                    <i class="bi bi-journal-bookmark-fill icon-blue"></i>
+                  </div>
+                  <div>
+                    <div class="planning-card-title">Baca Qur'an</div>
+                    <div class="planning-card-target" id="planningQuranTarget">
+                      Target: 20 halaman
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="planning-card"
+                onclick="switchPage('puasa', event)"
+                style="cursor: pointer"
+              >
+                <div class="planning-card-header">
+                  <div
+                    class="planning-card-icon"
+                    style="
+                      background: linear-gradient(
+                        135deg,
+                        #fef3c7 0%,
+                        #fde68a 100%
+                      );
+                      color: var(--accent-gold);
+                    "
+                  >
+                    <i class="bi bi-moon-stars-fill icon-gold"></i>
+                  </div>
+                  <div>
+                    <div class="planning-card-title">Puasa Ramadhan</div>
+                    <div class="planning-card-target">Target: 30 hari</div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="planning-card"
+                onclick="switchPage('dzikir', event)"
+                style="cursor: pointer"
+              >
+                <div class="planning-card-header">
+                  <div
+                    class="planning-card-icon"
+                    style="
+                      background: linear-gradient(
+                        135deg,
+                        #fce7f3 0%,
+                        #fbcfe8 100%
+                      );
+                      color: var(--accent-pink);
+                    "
+                  >
+                    <i class="bi bi-hand-thumbs-up-fill icon-pink"></i>
+                  </div>
+                  <div>
+                    <div class="planning-card-title">Dzikir Pagi & Petang</div>
+                    <div class="planning-card-target">Target: 5 dzikir</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SHALAT PAGE -->
+        <div class="page-section" id="shalat-page">
+          <div class="page-header-section">
+            <div class="page-header-top">
+              <h1 class="page-title">
+                <i class="bi bi-star-fill icon-green"></i>
+                Checklist Shalat
+              </h1>
+              <div class="page-progress-summary">
+                <div class="progress-badge">
+                  <span
+                    class="progress-badge-value"
+                    id="shalatPageProgressPercent"
+                    >0%</span
+                  >
+                  <span class="progress-badge-label">Progress</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-card">
+            <div class="checklist-container">
+              <div
+                class="checklist-item"
+                id="checklist-subuh"
+                onclick="togglePrayer('subuh', this)"
+              >
+                <div class="checkbox-custom">
+                  <i class="bi bi-check-lg"></i>
+                </div>
+                <span class="checklist-label"
+                  ><i class="bi bi-sunrise-fill icon-gold"></i> Subuh</span
+                >
+                <span class="time-badge" id="time-subuh">04:40</span>
+              </div>
+              <div
+                class="checklist-item"
+                id="checklist-dzuhur"
+                onclick="togglePrayer('dzuhur', this)"
+              >
+                <div class="checkbox-custom">
+                  <i class="bi bi-check-lg"></i>
+                </div>
+                <span class="checklist-label"
+                  ><i class="bi bi-sun-fill icon-gold"></i> Dzuhur</span
+                >
+                <span class="time-badge" id="time-dzuhur">12:04</span>
+              </div>
+              <div
+                class="checklist-item"
+                id="checklist-ashar"
+                onclick="togglePrayer('ashar', this)"
+              >
+                <div class="checkbox-custom">
+                  <i class="bi bi-check-lg"></i>
+                </div>
+                <span class="checklist-label"
+                  ><i class="bi bi-cloud-sun-fill icon-blue"></i> Ashar</span
+                >
+                <span class="time-badge" id="time-ashar">15:07</span>
+              </div>
+              <div
+                class="checklist-item"
+                id="checklist-maghrib"
+                onclick="togglePrayer('maghrib', this)"
+              >
+                <div class="checkbox-custom">
+                  <i class="bi bi-check-lg"></i>
+                </div>
+                <span class="checklist-label"
+                  ><i class="bi bi-sunset-fill icon-gold"></i> Maghrib</span
+                >
+                <span class="time-badge" id="time-maghrib">18:09</span>
+              </div>
+              <div
+                class="checklist-item"
+                id="checklist-isya"
+                onclick="togglePrayer('isya', this)"
+              >
+                <div class="checkbox-custom">
+                  <i class="bi bi-check-lg"></i>
+                </div>
+                <span class="checklist-label"
+                  ><i class="bi bi-moon-stars-fill icon-primary"></i> Isya</span
+                >
+                <span class="time-badge" id="time-isya">19:19</span>
+              </div>
+            </div>
+
+            <div class="progress-section">
+              <div class="progress-header">
+                <span class="progress-label">Progress Shalat</span>
+                <span class="progress-percentage" id="shalatProgressPercent"
+                  >0%</span
+                >
+              </div>
+              <div class="progress-bar-container">
+                <div
+                  class="progress-bar-fill fill-green"
+                  id="shalatProgressBar"
+                  style="width: 0%"
+                ></div>
+              </div>
+              <div class="status-badge low" id="shalatStatus">
+                <i class="bi bi-exclamation-circle-fill icon-gold"></i>
+                Belum optimal
+              </div>
+            </div>
+
+            <button class="btn-save" onclick="saveShalat()">
+              <i class="bi bi-save-fill icon-white"></i>
+              Simpan Progress
+            </button>
+          </div>
+        </div>
+
+        <!-- QURAN PAGE - WITH +/- BUTTONS & MARK COMPLETE -->
+        <div class="page-section" id="quran-page">
+          <div class="page-header-section">
+            <div class="page-header-top">
+              <h1 class="page-title">
+                <i class="bi bi-journal-bookmark-fill icon-blue"></i>
+                Target Qur'an
+              </h1>
+              <div class="page-progress-summary">
+                <div class="progress-badge">
+                  <span
+                    class="progress-badge-value"
+                    id="quranPageProgressPercent"
+                    >0%</span
+                  >
+                  <span class="progress-badge-label">Progress</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-card">
+            <div class="input-group">
+              <label class="input-label"
+                ><i class="bi bi-bullseye icon-primary"></i> Target
+                Halaman</label
+              >
+              <div class="quran-input-group">
+                <div class="quran-input-wrapper">
+                  <button class="quran-btn" onclick="decrementTarget()">
+                    <i class="bi bi-dash-lg"></i>
+                  </button>
+                  <div class="quran-input-container">
+                    <input
+                      type="number"
+                      id="quranTarget"
+                      value="20"
+                      onchange="updateQuranProgress()"
+                    />
+                  </div>
+                  <button class="quran-btn" onclick="incrementTarget()">
+                    <i class="bi bi-plus-lg"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label"
+                ><i class="bi bi-file-text icon-blue"></i> Sudah Dibaca</label
+              >
+              <div class="quran-input-group">
+                <div class="quran-input-wrapper">
+                  <button class="quran-btn" onclick="decrementRead()">
+                    <i class="bi bi-dash-lg"></i>
+                  </button>
+                  <div class="quran-input-container">
+                    <input
+                      type="number"
+                      id="quranRead"
+                      value="0"
+                      onchange="updateQuranProgress()"
+                    />
+                  </div>
+                  <button class="quran-btn" onclick="incrementRead()">
+                    <i class="bi bi-plus-lg"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="progress-section">
+              <div class="progress-header">
+                <span class="progress-label">Progress</span>
+                <span class="progress-percentage" id="quranProgressPercent"
+                  >0%</span
+                >
+              </div>
+              <div class="progress-bar-container">
+                <div
+                  class="progress-bar-fill fill-blue"
+                  id="quranProgressBar"
+                  style="width: 0%"
+                ></div>
+              </div>
+              <div class="status-badge low" id="quranStatus">
+                <i class="bi bi-arrow-up-circle-fill icon-blue"></i>
+                Masih bisa ditambah
+              </div>
+            </div>
+
+            <button
+              class="btn-complete"
+              id="btnMarkComplete"
+              onclick="markQuranComplete()"
+            >
+              <i class="bi bi-check-circle-fill"></i>
+              <span>Tandai Target Selesai</span>
+            </button>
+
+            <button class="btn-save" onclick="saveQuran()">
+              <i class="bi bi-save-fill icon-white"></i>
+              Simpan Progress
+            </button>
+          </div>
+        </div>
+
+        <!-- PUASA PAGE -->
+        <div class="page-section" id="puasa-page">
+          <div class="page-header-section">
+            <div class="page-header-top">
+              <h1 class="page-title">
+                <i class="bi bi-moon-stars-fill icon-gold"></i>
+                Puasa Ramadhan
+              </h1>
+              <div class="page-progress-summary">
+                <div class="progress-badge">
+                  <span
+                    class="progress-badge-value"
+                    id="puasaPageProgressPercent"
+                    >0%</span
+                  >
+                  <span class="progress-badge-label">Progress</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-card">
+            <div style="text-align: center; margin-bottom: 20px">
+              <h3 style="color: var(--accent-gold); margin-bottom: 8px">
+                Hari ke-<span id="ramadhanDay">1</span>
+              </h3>
+              <p style="color: var(--text-secondary)">Ramadhan 1446 H</p>
+            </div>
+
+            <div
+              class="checklist-item"
+              onclick="toggleTodayFast(this)"
+              style="margin-bottom: 20px"
+            >
+              <div class="checkbox-custom">
+                <i class="bi bi-check-lg"></i>
+              </div>
+              <span class="checklist-label"
+                ><i class="bi bi-check-circle-fill icon-green"></i> Sudah puasa
+                hari ini</span
+              >
+            </div>
+
+            <h5 style="margin-bottom: 12px; color: var(--text-primary)">
+              <i class="bi bi-calendar3 icon-gold"></i> Kalender 1-30
+            </h5>
+            <div class="ramadhan-calendar" id="ramadhanCalendar"></div>
+
+            <div class="progress-section">
+              <div class="progress-header">
+                <span class="progress-label">Progress 30 Hari</span>
+                <span class="progress-percentage" id="puasaProgressPercent"
+                  >0/30</span
+                >
+              </div>
+              <div class="progress-bar-container">
+                <div
+                  class="progress-bar-fill fill-gold"
+                  id="puasaProgressBar"
+                  style="width: 0%"
+                ></div>
+              </div>
+              <div class="status-badge low" id="puasaStatus">
+                <i class="bi bi-fire icon-gold"></i>
+                Semangat!
+              </div>
+            </div>
+
+            <button class="btn-save" onclick="savePuasa()">
+              <i class="bi bi-save-fill icon-white"></i>
+              Simpan Progress
+            </button>
+          </div>
+        </div>
+
+        <!-- DZIKIR PAGE -->
+        <div class="page-section" id="dzikir-page">
+          <div class="page-header-section">
+            <div class="page-header-top">
+              <h1 class="page-title">
+                <i class="bi bi-hand-thumbs-up-fill icon-pink"></i>
+                Dzikir Harian
+              </h1>
+              <div class="page-progress-summary">
+                <div class="progress-badge">
+                  <span
+                    class="progress-badge-value"
+                    id="dzikirPageProgressPercent"
+                    >0%</span
+                  >
+                  <span class="progress-badge-label">Progress</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-card">
+            <div class="checklist-container">
+              <div
+                class="checklist-item"
+                onclick="toggleDzikir('subhanallah', this)"
+              >
+                <div class="checkbox-custom">
+                  <i class="bi bi-check-lg"></i>
+                </div>
+                <span class="checklist-label"
+                  ><i class="bi bi-star-fill icon-gold"></i> Subhanallah</span
+                >
+              </div>
+              <div
+                class="checklist-item"
+                onclick="toggleDzikir('alhamdulillah', this)"
+              >
+                <div class="checkbox-custom">
+                  <i class="bi bi-check-lg"></i>
+                </div>
+                <span class="checklist-label"
+                  ><i class="bi bi-heart-fill icon-pink"></i>
+                  Alhamdulillah</span
+                >
+              </div>
+              <div
+                class="checklist-item"
+                onclick="toggleDzikir('allahuakbar', this)"
+              >
+                <div class="checkbox-custom">
+                  <i class="bi bi-check-lg"></i>
+                </div>
+                <span class="checklist-label"
+                  ><i class="bi bi-lightning-fill icon-gold"></i> Allahu
+                  Akbar</span
+                >
+              </div>
+              <div
+                class="checklist-item"
+                onclick="toggleDzikir('astaghfirullah', this)"
+              >
+                <div class="checkbox-custom">
+                  <i class="bi bi-check-lg"></i>
+                </div>
+                <span class="checklist-label"
+                  ><i class="bi bi-shield-fill icon-blue"></i>
+                  Astaghfirullah</span
+                >
+              </div>
+              <div
+                class="checklist-item"
+                onclick="toggleDzikir('sholawat', this)"
+              >
+                <div class="checkbox-custom">
+                  <i class="bi bi-check-lg"></i>
+                </div>
+                <span class="checklist-label"
+                  ><i class="bi bi-flower1 icon-pink"></i> Sholawat</span
+                >
+              </div>
+            </div>
+
+            <div class="progress-section">
+              <div class="progress-header">
+                <span class="progress-label">Progress Dzikir</span>
+                <span class="progress-percentage" id="dzikirProgressPercent"
+                  >0%</span
+                >
+              </div>
+              <div class="progress-bar-container">
+                <div
+                  class="progress-bar-fill fill-pink"
+                  id="dzikirProgressBar"
+                  style="width: 0%"
+                ></div>
+              </div>
+              <div class="status-badge low" id="dzikirStatus">
+                <i class="bi bi-exclamation-circle-fill icon-gold"></i>
+                Belum optimal
+              </div>
+            </div>
+
+            <button class="btn-save" onclick="saveDzikir()">
+              <i class="bi bi-save-fill icon-white"></i>
+              Simpan Progress
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <!-- Right Sidebar -->
+      <aside class="right-sidebar">
+        <div class="side-card next-prayer-card">
+          <div class="next-prayer-label">
+            <i class="bi bi-alarm icon-white"></i> Shalat Berikutnya
+          </div>
+          <div class="next-prayer-name" id="nextPrayerName">Ashar</div>
+          <div class="next-prayer-countdown" id="nextPrayerCountdown">
+            02:18:32
+          </div>
+          <div class="next-prayer-time" id="nextPrayerTime">15:07</div>
+        </div>
+
+        <div class="side-card ramadhan-progress-card">
+          <div class="ramadhan-day-display">
+            <div class="ramadhan-day-number" id="ramadhanDayDisplay">7</div>
+            <div class="ramadhan-day-total">/ 30</div>
+          </div>
+          <div class="ramadhan-progress-bar">
+            <div
+              class="ramadhan-progress-fill"
+              id="ramadhanProgressBar"
+              style="width: 23%"
+            ></div>
+          </div>
+          <div class="ramadhan-progress-text" id="ramadhanProgressText">
+            Hari ke-7 dari 30 hari
+          </div>
+        </div>
+
+        <div class="side-card">
+          <div class="side-header">
+            <h5 class="side-title">
+              <i class="bi bi-clock-fill icon-gold"></i>
+              Jadwal Shalat
+            </h5>
+            <i class="bi bi-geo-alt-fill icon-primary"></i>
+          </div>
+          <div class="prayer-list">
+            <div class="prayer-row completed" id="prayerRowSubuh">
+              <span class="prayer-name">Subuh</span>
+              <span class="prayer-time" id="timeSubuhSide">04:40</span>
+            </div>
+            <div class="prayer-row next" id="prayerRowDzuhur">
+              <span class="prayer-name">Dzuhur</span>
+              <span class="prayer-time" id="timeDzuhurSide">12:04</span>
+            </div>
+            <div class="prayer-row" id="prayerRowAshar">
+              <span class="prayer-name">Ashar</span>
+              <span class="prayer-time" id="timeAsharSide">15:07</span>
+            </div>
+            <div class="prayer-row" id="prayerRowMaghrib">
+              <span class="prayer-name">Maghrib</span>
+              <span class="prayer-time" id="timeMaghribSide">18:09</span>
+            </div>
+            <div class="prayer-row" id="prayerRowIsya">
+              <span class="prayer-name">Isya</span>
+              <span class="prayer-time" id="timeIsyaSide">19:19</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
