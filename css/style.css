@@ -884,9 +884,15 @@ body {
   opacity: 1;
 }
 
-/* Input Fields */
 .input-group {
-  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.quran-input-group {
+  margin-left: auto;
 }
 
 .input-label {
